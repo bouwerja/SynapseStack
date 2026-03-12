@@ -1,14 +1,10 @@
+/*
+Package scrapper
+Provide the scrapper with a url to scrap and return data
+*/
 package scrapper
 
-import (
-	"encoding/json"
-	"log"
-	"os"
-	"strings"
-	"time"
-
-	colly "github.com/gocolly/colly/v2"
-)
+import "fmt"
 
 // Course stores information about a coursera course
 type Course struct {
@@ -22,8 +18,13 @@ type Course struct {
 	Rating      string
 }
 
-func Scrapper() {
-	fName := "courses.json"
+func something() {
+	fmt.Println("Hello")
+}
+
+/*
+func ScrapInstance(someUrl string) {
+	fName := fmt.Sprintf("%s.json", time.Now())
 	file, err := os.Create(fName)
 	if err != nil {
 		log.Fatalf("Cannot create file %q: %s\n", fName, err)
@@ -37,11 +38,11 @@ func Scrapper() {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: coursera.org, www.coursera.org
-		colly.AllowedDomains("coursera.org", "www.coursera.org"),
+		colly.AllowedDomains(someUrl),
 
 		// Cache responses to prevent multiple download of pages
 		// even if the collector is restarted
-		colly.CacheDir("./coursera_cache"),
+		colly.CacheDir(fmt.Sprintf("./%s_cache", time.Now())),
 		// Cached responses older than the specified duration will be refreshed
 		colly.CacheExpiration(24*time.Hour),
 	)
@@ -123,3 +124,4 @@ func Scrapper() {
 	// Dump json to the standard output
 	enc.Encode(courses)
 }
+*/
