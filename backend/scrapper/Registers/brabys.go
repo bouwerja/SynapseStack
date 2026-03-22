@@ -23,7 +23,7 @@ type Business struct {
 	Location    string `json:"company_location"`
 }
 
-func BusinessRegisterScrapper() {
+func BrabysScrapper() {
 	var mu sync.Mutex
 	fName := "scrapper/JSONdata/business.json"
 	var businesses []Business
