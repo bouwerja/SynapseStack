@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"time"
 
-	reg "backend/scrapper/Registers"
+	f "backend/scrapper/Forums"
 )
 
 func main() {
 	start := time.Now()
 
-	fmt.Println("Initializing High-Speed Scraper...")
+	fmt.Println("Initializing Scraper...")
 
-	reg.Overpass()
+	f.ScrapBW()
 
 	duration := time.Since(start)
 	fmt.Printf("\nScraping completed in: %v\n", duration)
