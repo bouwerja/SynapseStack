@@ -25,7 +25,7 @@ CREATE TABLE Overpass (
 )
 ```
 
-- Business Register table
+- Business Register table<br>
   Contains information about businesses including:
   - Industry
   - Location
@@ -61,7 +61,11 @@ CREATE TABLE Forums (
 - ForumData (Raw JSON Data)
 
 ```sql
-SELECT * FROM HelloWorld
+CREATE TABLE ForumData (
+    ForumDataID INT PRIMARY KEY AUTO_INCREMENT,
+    DateRecordCreated DATETIME DEFAULT TIMESTAMP(),
+    ForumJSON JSON,
+)
 ```
 
 - ForumTransactions
