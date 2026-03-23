@@ -14,11 +14,11 @@ Aspiring entrepreneurs often lack data-driven insights into their specific niche
 
 To prove technical discipline, this project was architected to stay within a $15/month AWS Lightsail footprint:
 
-- Backend: Golang (Fiber) — Chosen for its minimal memory footprint and native concurrency.
+- Backend: Golang — Chosen for its minimal memory footprint and native concurrency.
 
-- Database: PostgreSQL + pgvector — A unified relational and vector store for company embeddings.
+- Database: MariaDB/MySQL — A unified relational and vector store for company embeddings.
 
-- AI/ML: Python (XGBoost) & Llama 3 (Quantized) — Local inference via Ollama to avoid high API costs.
+- AI/ML: Python & Llama 3 (Quantized) — Local inference via Ollama to avoid high API costs.
 
 - Frontend: Nuxt 3 (SSG) — Statically generated to ensure zero-lag delivery to 1,000+ daily users.
 
@@ -28,13 +28,13 @@ To prove technical discipline, this project was architected to stay within a $15
 
 ## 🧠 System Architecture
 
-- Ingestion Engine: A concurrent Go-based scraper (using Colly) pulls normalized data from SBA.gov, Crunchbase, and industry forums.
+- Ingestion Engine: A concurrent Go-based scraper (using Colly) pulls normalized data from maps, search engine tools, and industry forums.
 
-- Vector Similarity: Uses pgvector to perform "Nearest Neighbor" searches. It finds the top 50 "Lookalike" businesses to a user's profile to identify common failure points.
+- Vector Similarity: Uses MySQL `VECTOR(N)` to perform "Approximate Nearest Neighbor" searches. It finds the top 50 "Lookalike" businesses to a user's profile to identify common failure points.
 
-- Inference Layer: A sidecar service runs an XGBoost model to predict success probability based on capital, location, and industry saturation.
+- Inference Layer: A sidecar service runs an ML models to predict success probability based on capital, location, and industry saturation.
 
-- Optimization Layer: Utilizes Cgroups and Zram to ensure the LLM (Llama 3 3B) doesn't starve the PostgreSQL process of memory.
+- Optimization Layer: Utilizes Cgroups and Zram to ensure the LLM (Llama 3 4B) doesn't starve the MySQL process of memory.
 
 ---
 
@@ -42,7 +42,7 @@ To prove technical discipline, this project was architected to stay within a $15
 
 In a 2GB environment, "Standard" configurations crash. This project implements:
 
-- Capped Connection Pooling: Go-side limits (SetMaxOpenConns(25)) to prevent PostgreSQL process bloat.
+- Capped Connection Pooling: Go-side limits (SetMaxOpenConns(25)) to prevent MySQL process bloat.
 
 - IVFFlat Indexing: Optimized vector search to prioritize RAM savings over HNSW memory overhead.
 
@@ -56,10 +56,11 @@ In a 2GB environment, "Standard" configurations crash. This project implements:
 
 ```Bash
 
-├── cmd/api # Go Backend (The Orchestrator)
-├── cmd/scraper # Go Ingestion Engine
-├── ml/models # Python XGBoost & Quantized GGUF files
-├── web/ # Nuxt 3 Frontend (Statically Generated)
+├── backend/api # Go Backend (The Orchestrator)
+├── backend/scraper # Go Ingestion Engine
+├── ml/models # Python Machine Learning Models
+├── ml/llm # Quantized GGUF files
+├── frontend/ # Nuxt 3 Frontend (Statically Generated)
 ├── docker-compose.yml # Resource-limited environment config
 └── scripts/optimize # Linux Cgroup & Memory tuning scripts
 ```
@@ -68,7 +69,7 @@ In a 2GB environment, "Standard" configurations crash. This project implements:
 
 ## 📈 Key Milestones
 
-    [ ] Phase 1: Concurrent Go Scraper & PostgreSQL schema.
+    [X] Phase 1: Concurrent Go Scraper & MySQL schema.
 
     [ ] Phase 2: Entity Resolution & Vector Embedding generation.
 
