@@ -11,5 +11,7 @@ func TestDotEnv(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Log(tv.ServerName)
+	if tv.ServerName != "" {
+		t.Log("Test dot env passed")
+	}
 }

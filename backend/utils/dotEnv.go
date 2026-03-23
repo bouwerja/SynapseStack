@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,6 +12,10 @@ import (
 
 type DatabaseDetails struct {
 	ServerName string
+	Database   string
+	Username   string
+	Password   string
+	Port       string
 }
 
 func GetDatabaseDetails() (DatabaseDetails, error) {
@@ -19,14 +24,20 @@ func GetDatabaseDetails() (DatabaseDetails, error) {
 
 	err := godotenv.Load(filepath.Join(basePath, "..", ".env"))
 	if err != nil {
-		return DatabaseDetails{}, fmt.Errorf("error loading .env file: %w", err)
+		errString := fmt.Sprintf("error loading .env file: %s", err)
+		return DatabaseDetails{}, errors.New(errString)
 	}
 
 	serverName := os.Getenv("MYSQL_SERVER_NAME")
+	database := os.Getenv("MYSQL_DATABASE_NAME")
+	user := os.Getenv("MYSQL_USERNAME")
+	pwd := os.Getenv("MYSQL_PASSWORD")
+	port := os.Getenv("MYSQL_PORT")
 
-	if serverName == "" {
-		return DatabaseDetails{}, fmt.Errorf("MYSQL_SERVER_NAME not found in environment")
+	if serverName == "" || database == "" || user == "" || pwd == "" || port == "" {
+		errString := fmt.Sprintf("Environemnt Variables not found in environment:\nServer: %s\nDatabase: %s\nUser: %s\nPassword: %s\nPort: %s", serverName, database, user, pwd, port)
+		return DatabaseDetails{}, errors.New(errString)
 	}
 
-	return DatabaseDetails{ServerName: serverName}, nil
+	return DatabaseDetails{ServerName: serverName, Database: database, Username: user, Password: pwd, Port: port}, nil
 }
